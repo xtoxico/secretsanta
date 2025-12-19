@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            color: #333;
+            background: #fdf2e9;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        h1 {
+            color: #d35400;
+            text-align: center;
+        }
+
+        .list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list li {
+            background: #f8f9fa;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            font-style: italic;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn {
+            display: block;
+            text-align: center;
+            background: #34495e;
+            color: white;
+            padding: 0.8rem;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lista de Participantes</h1>
+
+    <div class="card">
+        <h2 style="text-align: center; margin-top: 0;">
+            <%= room.name %>
+        </h2>
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            Estado:
+            <% if (room.drawStatus==='pending' ) { %>
+                <span class="status-badge status-pending">Inscripción Abierta</span>
+                <% } else { %>
+                    <span class="status-badge status-completed">Sorteo Realizado</span>
+                    <% } %>
+        </div>
+
+        <ul class="list">
+            <% if (room.participants.length===0) { %>
+                <li class="empty">Aún no hay participantes inscritos.</li>
+                <% } %>
+                    <% room.participants.forEach(function(p) { %>
+                        <li>
+                            <%= p.name %>
+                        </li>
+                        <% }); %>
+        </ul>
+
+        <% if (!isParticipant && room.drawStatus==='pending' ) { %>
+            <a href="/unirse/<%= room.id %>" class="btn" style="background: #e74c3c;">¡Quiero participar!</a>
+            <% } else if (isParticipant) { %>
+                <div style="text-align: center; margin-top: 1rem; color: #27ae60; font-weight: bold;">✅ Ya estás
+                    inscrito</div>
+                <a href="/sorteo/<%= room.id %>" class="btn" style="background: #2ecc71;">Ver Sorteo</a>
+                <% } %>
+
+                    <a href="/" class="btn">Volver al Inicio</a>
+    </div>
+</body>
+
+</html>

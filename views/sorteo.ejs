@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            color: #333;
+            background: #fdf2e9;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        h1 {
+            color: #d35400;
+        }
+
+        .result-box {
+            background: #eafaf1;
+            padding: 2rem;
+            border: 3px solid #2ecc71;
+            border-radius: 12px;
+            margin: 2rem 0;
+            animation: popIn 0.5s ease;
+        }
+
+        .target-name {
+            font-size: 2.5rem;
+            color: #27ae60;
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+
+        .hint {
+            font-style: italic;
+            color: #555;
+            background: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .btn-draw {
+            background: #d35400;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(211, 84, 0, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-draw:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎅 Sorteo - <%= room.name %> 🎄</h1>
+
+    <div class="card">
+        <% if (participant) { %>
+            <h2>Hola, <%= participant.name %> 👋</h2>
+            <% } %>
+
+                <% if (room.drawStatus==='completed' ) { %>
+
+                    <% if (userMatch) { %>
+                        <p>El sorteo ha finalizado. Te ha tocado regalar a:</p>
+                        <div class="result-box">
+                            <div class="target-name">🎁 <%= userMatch.name %>
+                            </div>
+                            <div class="hint">Pista: <%= userMatch.giftHint %>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: #777;">Recuerda: El regalo debe ser entregado antes del <%=
+                                room.maxDate %>. <% if(room.maxPrice) { %>Precio máx: <%= room.maxPrice %>
+                                        <% } %>
+                        </p>
+                        <% } else if (participant) { %>
+                            <div style="padding: 2rem; background: #fbeee6; border-radius: 8px;">
+                                <h3>Sorteo Realizado</h3>
+                                <p>Parece que ocurrió un error y no encontramos tu asignación. ¿Te uniste antes del
+                                    sorteo?</p>
+                            </div>
+                            <% } else { %>
+                                <div style="padding: 2rem; background: #fff3cd; border-radius: 8px; color: #856404;">
+                                    <h3>Sorteo Realizado</h3>
+                                    <p>No parece que estés participando en esta sala (o no has iniciado sesión en este
+                                        navegador).</p>
+                                    <a href="/unirse/<%= room.id %>" style="color: #856404; font-weight: bold;">Intentar
+                                        ir al enlace de inscripción</a>
+                                </div>
+                                <% } %>
+
+                                    <% } else { %>
+
+                                        <div style="margin: 2rem 0;">
+                                            <p style="font-size: 1.1rem;">Hay <strong>
+                                                    <%= room.participants.length %>
+                                                </strong> participantes inscritos.</p>
+
+                                            <% if (room.participants.length < 3) { %>
+                                                <p style="color: #e74c3c; font-weight: bold;">⚠️ Se necesitan al menos 3
+                                                    participantes para el sorteo (para que sea divertido).</p>
+                                                <% } else { %>
+                                                    <p>Si todos están listos, pulsa el botón para realizar el sorteo.
+                                                    </p>
+                                                    <p style="font-size: 0.9rem; color: #777;">(Cualquiera con este
+                                                        enlace puede iniciar el sorteo, ¡asegúrate de que todos estén
+                                                        dentro!)</p>
+
+                                                    <form action="/sorteo/<%= room.id %>" method="POST"
+                                                        onsubmit="return confirm('¿Seguro que están todos inscritos? El sorteo es irreversible.');">
+                                                        <button type="submit" class="btn-draw">🎲 REALIZAR
+                                                            SORTEO</button>
+                                                    </form>
+                                                    <% } %>
+                                        </div>
+
+                                        <a href="/lista/<%= room.id %>"
+                                            style="color: #3498db; text-decoration: none;">Ver lista de inscritos</a>
+
+                                        <% } %>
+
+                                            <div
+                                                style="margin-top: 2rem; border-top: 1px solid #eee; padding-top: 1rem;">
+                                                <a href="/"
+                                                    style="color: #95a5a6; text-decoration: none; font-size: 0.9rem;">Volver
+                                                    al Inicio</a>
+                                            </div>
+    </div>
+</body>
+
+</html>
