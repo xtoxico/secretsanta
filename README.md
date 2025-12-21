@@ -1,2 +1,2 @@
 # secretsanta
-Una aplicación para hacernos amigos invisibles.
+Una aplicación para hacer amigos invisibles.
